@@ -1,5 +1,6 @@
 package com.example.administrator.mymvp.module.home;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
 
+import com.dl7.downloaderlib.FileDownloader;
 import com.example.administrator.mymvp.R;
 import com.example.administrator.mymvp.adapter.ViewPagerAdapter;
 import com.example.administrator.mymvp.module.base.BaseActivity;
@@ -16,7 +18,10 @@ import com.example.administrator.mymvp.module.base.BaseFragment;
 import com.example.administrator.mymvp.module.my.MyMainFragment;
 import com.example.administrator.mymvp.module.news.NewsMainFragment;
 import com.example.administrator.mymvp.module.video.VideoMainFragment;
+import com.example.administrator.mymvp.utils.SnackbarUtils;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +30,7 @@ import butterknife.ButterKnife;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageNavigationView;
 import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
+import rx.functions.Action1;
 
 /**
  * ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
@@ -96,6 +102,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         mController.setupWithViewPager(mFlContainer);
+        _getPermission();
     }
 
     @Override
@@ -113,4 +120,22 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+
+    private void _getPermission() {
+        new RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean granted) {
+                        if (granted) {
+                           /* final File dir = new File(FileDownloader.getDownloadDir());
+                            if (!dir.exists() || !dir.isDirectory()) {
+                                dir.delete();
+                                dir.mkdirs();
+                            }*/
+                        } else {
+                            SnackbarUtils.showSnackbar(MainActivity.this, "获取读写文件权限失败", true);
+                        }
+                    }
+                });
+    }
 }

@@ -2,11 +2,13 @@ package com.example.administrator.mymvp.module.news;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.administrator.mymvp.R;
 import com.example.administrator.mymvp.adapter.ViewPagerAdapter;
@@ -15,9 +17,12 @@ import com.example.administrator.mymvp.injector.module.NewsMainModule;
 import com.example.administrator.mymvp.local.table.NewsTypeInfo;
 import com.example.administrator.mymvp.module.base.BaseFragment;
 import com.example.administrator.mymvp.module.base.IRxBusPresenter;
+import com.example.administrator.mymvp.module.channel.ChannelActivity;
 import com.example.administrator.mymvp.module.newslist.NewsListFragment;
 import com.example.administrator.mymvp.rxbus.event.ChannelEvent;
+import com.example.administrator.mymvp.utils.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,6 +71,7 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
                 _handleChannelEvent(channelEvent);
             }
         });
+        ToastUtils.showToast("程序没进来");
     }
 
     @Override
@@ -76,6 +82,13 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
     @Override
     public void loadData(List<NewsTypeInfo> checkList) {
 
+        List<Fragment> fragments = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
+        for (NewsTypeInfo bean : checkList) {
+            titles.add(bean.getName());
+            fragments.add(NewsListFragment.newInstance(bean.getTypeId()));
+        }
+        mPagerAdapter.setItems(fragments, titles);
     }
 
     /**
@@ -102,6 +115,15 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_channel, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.item_channel) {
+            ChannelActivity.launch(mContext);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.administrator.mymvp.api;
 import android.support.annotation.NonNull;
 
 import com.example.administrator.mymvp.App;
+import com.example.administrator.mymvp.api.bean.NewsInfo;
 import com.example.administrator.mymvp.utils.NetUtil;
 import com.orhanobut.logger.Logger;
 
@@ -10,10 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,6 +25,10 @@ import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import static okhttp3.CacheControl.FORCE_CACHE;
 import static okhttp3.CacheControl.FORCE_NETWORK;
@@ -32,6 +38,8 @@ import static okhttp3.CacheControl.FORCE_NETWORK;
  */
 
 public class RetrofitService {
+
+    private static final String HEAD_LINE_NEWS = "T1348647909107";
 
     //设缓存有效期为1天
     static final long CACHE_STALE_SEC = 60 * 60 * 24 * 1;
@@ -49,6 +57,9 @@ public class RetrofitService {
     private static final String BASE_PANDA_URL = "http://www.panda.tv";  //熊猫tv
 
     private static INewsApi sNewsService;
+
+    // 递增页码
+    private static final int INCREASE_PAGE = 20;
 
     private RetrofitService() {
         throw new AssertionError();
@@ -148,6 +159,43 @@ public class RetrofitService {
             return URLDecoder.decode(requestBuffer.readUtf8(), "UTF-8");
         }
         return "null";
+    }
+
+    /************************************ API *******************************************/
+
+    /**
+     * 获取新闻列表
+     * @return
+     */
+    public static Observable<NewsInfo> getNewsList(String newsId, int page) {
+        String type;
+        if (newsId.equals(HEAD_LINE_NEWS)) {
+            type = "headline";
+        } else {
+            type = "list";
+        }
+        return sNewsService.getNewsList(type, newsId, page * INCREASE_PAGE)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(_flatMapNews(newsId));
+    }
+
+    /******************************************* 转换器 **********************************************/
+
+    /**
+     * 类型转换
+     * @param typeStr 新闻类型
+     * @return
+     */
+    private static Func1<Map<String, List<NewsInfo>>, Observable<NewsInfo>> _flatMapNews(final String typeStr) {
+        return new Func1<Map<String, List<NewsInfo>>, Observable<NewsInfo>>() {
+            @Override
+            public Observable<NewsInfo> call(Map<String, List<NewsInfo>> newsListMap) {
+                return Observable.from(newsListMap.get(typeStr));
+            }
+        };
     }
 
 

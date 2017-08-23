@@ -30,15 +30,20 @@ public class AppliacationModule {
 
 
     @Provides
+    @Singleton
     Context provideApplicationContext() {
         return mApplication.getApplicationContext();
     }
 
     @Provides
+    @Singleton
     RxBus provideRxBus() {
         return mRxBus;
     }
 
     @Provides
-    DaoSession provideDaoSession(){return mDaoSession;}
+    @Singleton
+    DaoSession provideDaoSession() {
+        return mDaoSession;
+    }
 }

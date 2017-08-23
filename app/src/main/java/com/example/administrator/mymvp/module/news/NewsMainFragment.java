@@ -71,17 +71,15 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
                 _handleChannelEvent(channelEvent);
             }
         });
-        ToastUtils.showToast("程序没进来");
     }
 
     @Override
     protected void updateViews(boolean isRefresh) {
-
+        mPresenter.getData(isRefresh);
     }
 
     @Override
     public void loadData(List<NewsTypeInfo> checkList) {
-
         List<Fragment> fragments = new ArrayList<>();
         List<String> titles = new ArrayList<>();
         for (NewsTypeInfo bean : checkList) {

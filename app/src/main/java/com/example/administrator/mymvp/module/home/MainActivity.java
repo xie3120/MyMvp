@@ -19,6 +19,7 @@ import com.example.administrator.mymvp.module.my.MyMainFragment;
 import com.example.administrator.mymvp.module.news.NewsMainFragment;
 import com.example.administrator.mymvp.module.video.VideoMainFragment;
 import com.example.administrator.mymvp.utils.SnackbarUtils;
+import com.example.administrator.mymvp.widget.FlexibleViewPager;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
@@ -52,7 +53,7 @@ import rx.functions.Action1;
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.fl_container)
-    ViewPager mFlContainer;
+    FlexibleViewPager mFlContainer;
     @BindView(R.id.tab)
     PageNavigationView mTab;
 
@@ -75,6 +76,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        mFlContainer.setCanScroll(false);
+
         mController = mTab.material()
                 .addItem(R.drawable.ic_explore_normal, R.drawable.ic_explore_pressed, "News")
                 .addItem(R.drawable.ic_live_normal, R.drawable.ic_live_pressed, "Live")

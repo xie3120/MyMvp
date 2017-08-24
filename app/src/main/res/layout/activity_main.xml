@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
+    <com.example.administrator.mymvp.widget.FlexibleViewPager
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

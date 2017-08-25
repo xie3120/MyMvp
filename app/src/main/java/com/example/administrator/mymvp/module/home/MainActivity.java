@@ -67,7 +67,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-
         mFlContainer.setCanScroll(false);
 
         mController = mTab.material()

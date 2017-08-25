@@ -3,8 +3,13 @@ package com.example.administrator.mymvp.api;
 import android.support.annotation.NonNull;
 
 import com.example.administrator.mymvp.App;
+import com.example.administrator.mymvp.api.bean.LiveListItemBean;
+import com.example.administrator.mymvp.api.bean.NewsDetailInfo;
 import com.example.administrator.mymvp.api.bean.NewsInfo;
+import com.example.administrator.mymvp.api.bean.PhotoSetInfo;
+import com.example.administrator.mymvp.api.bean.SpecialInfo;
 import com.example.administrator.mymvp.utils.NetUtil;
+import com.example.administrator.mymvp.utils.StringUtils;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -31,7 +36,6 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static okhttp3.CacheControl.FORCE_CACHE;
-import static okhttp3.CacheControl.FORCE_NETWORK;
 
 /**
  * Created by Administrator on 2017/8/21 0021.
@@ -57,7 +61,7 @@ public class RetrofitService {
     private static final String BASE_PANDA_URL = "http://www.panda.tv";  //熊猫tv
 
     private static INewsApi sNewsService;
-
+    private static ILiveApi sLiveService;
     // 递增页码
     private static final int INCREASE_PAGE = 20;
 
@@ -88,6 +92,13 @@ public class RetrofitService {
                 .build();
 
         sNewsService = newsRetrofit.create(INewsApi.class);
+
+        Retrofit LiveRetrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(BASE_LIVE_URL)
+                .build();
+        sLiveService = LiveRetrofit.create(ILiveApi.class);
     }
 
 
@@ -182,6 +193,63 @@ public class RetrofitService {
                 .flatMap(_flatMapNews(newsId));
     }
 
+
+    /**
+     * 获取新闻详情
+     * @param newsId 新闻ID
+     * @return
+     */
+    public static Observable<NewsDetailInfo> getNewsDetail(final String newsId) {
+        return sNewsService.getNewsDetail(newsId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Map<String, NewsDetailInfo>, Observable<NewsDetailInfo>>() {
+                    @Override
+                    public Observable<NewsDetailInfo> call(Map<String, NewsDetailInfo> newsDetailMap) {
+                        return Observable.just(newsDetailMap.get(newsId));
+                    }
+                });
+    }
+
+    /**
+     * 获取图集
+     * @param photoId 图集ID
+     * @return
+     */
+    public static Observable<PhotoSetInfo> getPhotoSet(String photoId) {
+        return sNewsService.getPhotoSet(StringUtils.clipPhotoSetId(photoId))
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取专题数据
+     * @param specialId
+     * @return
+     */
+    public static Observable<SpecialInfo> getSpecial(String specialId) {
+        return sNewsService.getSpecial(specialId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(_flatMapSpecial(specialId));
+    }
+
+    public static Observable<List<LiveListItemBean>> getLiveList(int offset, int limit, String live_type, String game_type){
+        return sLiveService.getLiveList(offset, limit, live_type, game_type)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(_flatMapLiveList(live_type));
+
+    }
+
     /******************************************* 转换器 **********************************************/
 
     /**
@@ -198,5 +266,28 @@ public class RetrofitService {
         };
     }
 
+    private static Func1<Map<String,List<LiveListItemBean>>,Observable<List<LiveListItemBean>>> _flatMapLiveList( final String live_type){
+      return new Func1<Map<String, List<LiveListItemBean>>, Observable<List<LiveListItemBean>>>() {
+          @Override
+          public Observable<List<LiveListItemBean>> call(Map<String, List<LiveListItemBean>> stringListMap) {
+              return Observable.just(stringListMap.get(live_type));
+          }
+      };
+    };
+
+
+    /**
+     * 类型转换
+     * @param specialId 专题id
+     * @return
+     */
+    private static Func1<Map<String, SpecialInfo>, Observable<SpecialInfo>> _flatMapSpecial(final String specialId) {
+        return new Func1<Map<String, SpecialInfo>, Observable<SpecialInfo>>() {
+            @Override
+            public Observable<SpecialInfo> call(Map<String, SpecialInfo> specialMap) {
+                return Observable.just(specialMap.get(specialId));
+            }
+        };
+    }
 
 }

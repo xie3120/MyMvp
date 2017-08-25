@@ -10,8 +10,9 @@ import com.example.administrator.mymvp.R;
 import com.example.administrator.mymvp.adapter.item.NewsMultiItem;
 import com.example.administrator.mymvp.api.NewsUtils;
 import com.example.administrator.mymvp.api.bean.NewsInfo;
-import com.example.administrator.mymvp.module.article.NewsArticleActivity;
-import com.example.administrator.mymvp.module.special.SpecialActivity;
+import com.example.administrator.mymvp.module.news.article.NewsArticleActivity;
+import com.example.administrator.mymvp.module.news.photoset.PhotoSetActivity;
+import com.example.administrator.mymvp.module.news.special.SpecialActivity;
 import com.example.administrator.mymvp.utils.DefIconFactory;
 import com.example.administrator.mymvp.utils.ImageLoader;
 import com.example.administrator.mymvp.utils.ListUtils;
@@ -43,7 +44,14 @@ public class NewsMultiListAdapter extends BaseMultiItemQuickAdapter<NewsMultiIte
 
     @Override
     protected void convert(BaseViewHolder holder, NewsMultiItem item) {
-
+        switch (item.getItemType()) {
+            case NewsMultiItem.ITEM_TYPE_NORMAL:
+                _handleNewsNormal(holder, item.getNewsBean());
+                break;
+            case NewsMultiItem.ITEM_TYPE_PHOTO_SET:
+                _handleNewsPhotoSet(holder, item.getNewsBean());
+                break;
+        }
     }
 
 
@@ -112,8 +120,10 @@ public class NewsMultiListAdapter extends BaseMultiItemQuickAdapter<NewsMultiIte
         rippleLayout.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-               // PhotoSetActivity.launch(mContext, item.getPhotosetID());
+              PhotoSetActivity.launch(mContext, item.getPhotosetID());
             }
         });
     }
+
+
 }

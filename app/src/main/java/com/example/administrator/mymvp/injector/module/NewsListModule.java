@@ -4,8 +4,8 @@ import com.dl7.recycler.adapter.BaseQuickAdapter;
 import com.example.administrator.mymvp.adapter.NewsMultiListAdapter;
 import com.example.administrator.mymvp.injector.PerFragment;
 import com.example.administrator.mymvp.module.base.IBasePresenter;
-import com.example.administrator.mymvp.module.newslist.NewsListFragment;
-import com.example.administrator.mymvp.module.newslist.NewsListPresenter;
+import com.example.administrator.mymvp.module.news.newslist.NewsListFragment;
+import com.example.administrator.mymvp.module.news.newslist.NewsListPresenter;
 
 import dagger.Module;
 import dagger.Provides;

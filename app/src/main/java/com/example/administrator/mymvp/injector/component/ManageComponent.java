@@ -3,7 +3,7 @@ package com.example.administrator.mymvp.injector.component;
 
 import com.example.administrator.mymvp.injector.PerActivity;
 import com.example.administrator.mymvp.injector.module.ChannelModule;
-import com.example.administrator.mymvp.module.channel.ChannelActivity;
+import com.example.administrator.mymvp.module.news.channel.ChannelActivity;
 
 import dagger.Component;
 

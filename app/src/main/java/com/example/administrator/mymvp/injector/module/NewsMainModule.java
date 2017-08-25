@@ -4,8 +4,8 @@ import com.example.administrator.mymvp.adapter.ViewPagerAdapter;
 import com.example.administrator.mymvp.injector.PerFragment;
 import com.example.administrator.mymvp.local.table.DaoSession;
 import com.example.administrator.mymvp.module.base.IRxBusPresenter;
-import com.example.administrator.mymvp.module.news.NewsMainFragment;
-import com.example.administrator.mymvp.module.news.NewsMainPresenter;
+import com.example.administrator.mymvp.module.news.main.NewsMainFragment;
+import com.example.administrator.mymvp.module.news.main.NewsMainPresenter;
 import com.example.administrator.mymvp.rxbus.RxBus;
 
 import dagger.Module;

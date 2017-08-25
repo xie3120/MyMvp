@@ -9,8 +9,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.example.administrator.mymvp.api.NewsUtils;
 import com.example.administrator.mymvp.api.bean.NewsInfo;
-import com.example.administrator.mymvp.module.article.NewsArticleActivity;
-import com.example.administrator.mymvp.module.special.SpecialActivity;
+import com.example.administrator.mymvp.module.news.article.NewsArticleActivity;
+import com.example.administrator.mymvp.module.news.special.SpecialActivity;
 
 /**
  * Created by long on 2016/8/24.

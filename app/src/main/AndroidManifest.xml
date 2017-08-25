@@ -24,6 +24,25 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name=".module.news.article.NewsArticleActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".module.news.channel.ChannelActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".module.news.photoset.PhotoSetActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".module.news.special.SpecialActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

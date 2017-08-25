@@ -4,9 +4,9 @@ import com.dl7.recycler.adapter.BaseQuickAdapter;
 import com.example.administrator.mymvp.adapter.ManageAdapter;
 import com.example.administrator.mymvp.injector.PerActivity;
 import com.example.administrator.mymvp.local.table.DaoSession;
-import com.example.administrator.mymvp.module.channel.ChannelActivity;
-import com.example.administrator.mymvp.module.channel.ChannelPresenter;
-import com.example.administrator.mymvp.module.channel.IChannelPresenter;
+import com.example.administrator.mymvp.module.news.channel.ChannelActivity;
+import com.example.administrator.mymvp.module.news.channel.ChannelPresenter;
+import com.example.administrator.mymvp.module.news.channel.IChannelPresenter;
 import com.example.administrator.mymvp.rxbus.RxBus;
 
 import dagger.Module;

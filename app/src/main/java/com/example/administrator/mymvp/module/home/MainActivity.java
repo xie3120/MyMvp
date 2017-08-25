@@ -1,32 +1,24 @@
 package com.example.administrator.mymvp.module.home;
 
 import android.Manifest;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
-import android.widget.FrameLayout;
 
-import com.dl7.downloaderlib.FileDownloader;
 import com.example.administrator.mymvp.R;
-import com.example.administrator.mymvp.adapter.ViewPagerAdapter;
 import com.example.administrator.mymvp.module.base.BaseActivity;
 import com.example.administrator.mymvp.module.base.BaseFragment;
 import com.example.administrator.mymvp.module.my.MyMainFragment;
-import com.example.administrator.mymvp.module.news.NewsMainFragment;
-import com.example.administrator.mymvp.module.video.VideoMainFragment;
+import com.example.administrator.mymvp.module.news.main.NewsMainFragment;
+import com.example.administrator.mymvp.module.video.main.VideoMainFragment;
 import com.example.administrator.mymvp.utils.SnackbarUtils;
+import com.example.administrator.mymvp.widget.FlexibleViewPager;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageNavigationView;
 import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
@@ -52,7 +44,7 @@ import rx.functions.Action1;
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.fl_container)
-    ViewPager mFlContainer;
+    FlexibleViewPager mFlContainer;
     @BindView(R.id.tab)
     PageNavigationView mTab;
 
@@ -75,6 +67,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+
+        mFlContainer.setCanScroll(false);
+
         mController = mTab.material()
                 .addItem(R.drawable.ic_explore_normal, R.drawable.ic_explore_pressed, "News")
                 .addItem(R.drawable.ic_live_normal, R.drawable.ic_live_pressed, "Live")
@@ -85,7 +80,7 @@ public class MainActivity extends BaseActivity {
         mFragments.add(new VideoMainFragment());
         mFragments.add(new MyMainFragment());
 
-        mFlContainer.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        mFlContainer.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return mFragments.get(position);
@@ -101,6 +96,7 @@ public class MainActivity extends BaseActivity {
                 return titles[position];
             }
         });
+
         mController.setupWithViewPager(mFlContainer);
         _getPermission();
     }

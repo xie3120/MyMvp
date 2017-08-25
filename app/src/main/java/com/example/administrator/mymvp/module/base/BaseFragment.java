@@ -45,6 +45,8 @@ public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment 
     //缓存Fragment view
     private View mRootView;
 
+    private boolean mIsMulti = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +73,10 @@ public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
+        if (getUserVisibleHint() && mRootView != null && !mIsMulti) {
+            mIsMulti = true;
+            updateViews(false);
+        }
     }
 
 
@@ -99,6 +103,16 @@ public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment 
         if (mEmptyLayout != null) {
             mEmptyLayout.setEmptyStatus(EmptyLayout.STATUS_NO_NET);
             mEmptyLayout.setRetryListener(this);
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser && isVisible() && mRootView != null && !mIsMulti) {
+            mIsMulti = true;
+            updateViews(false);
+        } else {
+            super.setUserVisibleHint(isVisibleToUser);
         }
     }
 

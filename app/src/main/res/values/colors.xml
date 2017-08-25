@@ -33,4 +33,7 @@
     <color name="color_tab_pressed">@color/color_primary</color>
     <color name="color_tab_normal">@color/color_secondary_text</color>
 
+    <color name="color_icons">@color/primary</color>
+    <color name="color_layout_background">#f3f6f5</color>
+
 </resources>

@@ -1,6 +1,8 @@
 package com.example.administrator.mymvp.api;
 
+import com.example.administrator.mymvp.api.bean.NewsDetailInfo;
 import com.example.administrator.mymvp.api.bean.NewsInfo;
+import com.example.administrator.mymvp.api.bean.PhotoSetInfo;
 import com.example.administrator.mymvp.api.bean.SpecialInfo;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import rx.Observable;
 
+import static com.example.administrator.mymvp.api.RetrofitService.AVOID_HTTP403_FORBIDDEN;
 import static com.example.administrator.mymvp.api.RetrofitService.CACHE_CONTROL_NETWORK;
 
 /**
@@ -45,4 +48,25 @@ public interface INewsApi {
     @GET("nc/special/{specialId}.html")
     Observable<Map<String, SpecialInfo>> getSpecial(@Path("specialId") String specialIde);
 
+    /**
+     * 获取新闻详情
+     * eg: http://c.3g.163.com/nc/article/BV56RVG600011229/full.html
+     *
+     * @param newsId 专题ID
+     * @return
+     */
+    @Headers(AVOID_HTTP403_FORBIDDEN)
+    @GET("nc/article/{newsId}/full.html")
+    Observable<Map<String, NewsDetailInfo>> getNewsDetail(@Path("newsId") String newsId);
+
+    /**
+     * 获取新闻详情
+     * eg: http://c.3g.163.com/photo/api/set/0006/2136404.json
+     *
+     * @param photoId 图集ID
+     * @return
+     */
+    @Headers(CACHE_CONTROL_NETWORK)
+    @GET("photo/api/set/{photoId}.json")
+    Observable<PhotoSetInfo> getPhotoSet(@Path("photoId") String photoId);
 }

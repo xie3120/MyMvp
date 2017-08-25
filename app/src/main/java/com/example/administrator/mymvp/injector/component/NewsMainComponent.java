@@ -2,7 +2,7 @@ package com.example.administrator.mymvp.injector.component;
 
 import com.example.administrator.mymvp.injector.PerFragment;
 import com.example.administrator.mymvp.injector.module.NewsMainModule;
-import com.example.administrator.mymvp.module.news.NewsMainFragment;
+import com.example.administrator.mymvp.module.news.main.NewsMainFragment;
 
 import dagger.Component;
 
